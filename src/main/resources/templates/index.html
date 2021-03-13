@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=#{lang}">
+<head>
+  <meta charset="UTF-8">
+  <title>Console</title>
+  <script src="static/js/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<div th:text="#{hello.world}">
+  hello, world
+</div>
+
+<a th:href="@{/(l='zh_CN')}">中文</a>
+<a th:href="@{/(l='en_US')}">English</a>
+<script type="text/javascript">
+  $(document).ready(function () {
+    console.log('hello')
+  });
+</script>
+</body>
+</html>
