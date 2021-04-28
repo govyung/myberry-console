@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=#{lang}">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="#{nav.menu.console}">Console</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="static/css/foundation-6.6.3.min.css"/>
+</head>
+<body>
+<header>
+  <div class="title-bar" data-responsive-toggle="console-menu" data-hide-for="medium">
+    <button class="menu-icon" type="button" data-toggle="console-menu"></button>
+    <div class="title-bar-title" th:text="#{nav.menu}">Menu</div>
+  </div>
+
+  <div class="top-bar grid-x" id="console-menu">
+    <div class="cell medium-2 large-3"></div>
+    <div class="cell medium-8 large-6">
+      <ul class="dropdown menu" data-dropdown-menu>
+        <li class="menu-text" th:text="#{nav.title}">MyBerry Management</li>
+        <li><a href="/" th:text="#{nav.menu.console}">Console</a></li>
+        <li><a href="/component" th:text="#{nav.menu.component}">Component</a></li>
+        <li>
+          <a href="#" th:text="#{nav.menu.language}">Language</a>
+          <ul class="menu vertical">
+            <li><a th:href="@{/(lang='zh_CN')}">中文</a></li>
+            <li><a th:href="@{/(lang='en_US')}">English</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="cell medium-2 large-3"></div>
+  </div>
+  </div>
+</header>
+<br>
+<div>
+  <div class="grid-x">
+    <div class="cell small-1  medium-2 large-3"></div>
+    <div class="cell small-10 medium-8 large-6">
+      <table class="hover">
+        <thead>
+        <tr>
+          <th th:text="#{console.table.head.sid}">Sid</th>
+          <th th:text="#{console.table.head.type}">Type</th>
+          <th th:text="#{console.table.head.ip}">IP</th>
+          <th th:text="#{console.table.head.service.port}">ServicePort</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="clusters : ${clusterList}">
+          <td th:text="${clusters.sid}"></td>
+          <td th:text="${clusters.type}"></td>
+          <td th:text="${clusters.ip}"></td>
+          <td th:text="${clusters.servicePort}"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cell small-1  medium-2 large-3"></div>
+  </div>
+</div>
+<script src="static/js/jquery-3.6.0.min.js"></script>
+<script src="static/js/foundation.min.js"></script>
+<script>
+  $(document).foundation();
+</script>
+</body>
+</body>
+</html>

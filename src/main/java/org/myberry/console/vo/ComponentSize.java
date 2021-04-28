@@ -21,14 +21,23 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-package org.myberry.console;
+package org.myberry.console.vo;
 
-import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+public class ComponentSize {
 
-public class CustomLocal extends CookieLocaleResolver {
+  private int componentSize;
 
-  public CustomLocal() {
-    this.setCookieName("locale");
-    this.setCookieMaxAge(30 * 24 * 60 * 60);
+  public ComponentSize() {}
+
+  public ComponentSize(int componentSize) {
+    this.componentSize = componentSize;
+  }
+
+  public int getComponentSize() {
+    return componentSize;
+  }
+
+  public void setComponentSize(int componentSize) {
+    this.componentSize = componentSize;
   }
 }

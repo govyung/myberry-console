@@ -21,14 +21,15 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-package org.myberry.console;
+package org.myberry.console.annotation;
 
-import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class CustomLocal extends CookieLocaleResolver {
-
-  public CustomLocal() {
-    this.setCookieName("locale");
-    this.setCookieMaxAge(30 * 24 * 60 * 60);
-  }
-}
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.METHOD})
+public @interface ResponseData {}

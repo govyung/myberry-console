@@ -23,9 +23,12 @@
 */
 package org.myberry.console;
 
+import org.myberry.console.config.MyBerryAdminClientConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Import;
 
+@Import({MyBerryAdminClientConfig.class})
 @SpringBootApplication
 public class ServerStartup {
 

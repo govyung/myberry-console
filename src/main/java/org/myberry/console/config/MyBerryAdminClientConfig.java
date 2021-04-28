@@ -21,14 +21,23 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-package org.myberry.console;
+package org.myberry.console.config;
 
-import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import javax.annotation.Resource;
+import org.myberry.client.admin.DefaultAdminClient;
+import org.springframework.context.annotation.Bean;
 
-public class CustomLocal extends CookieLocaleResolver {
+public class MyBerryAdminClientConfig {
 
-  public CustomLocal() {
-    this.setCookieName("locale");
-    this.setCookieMaxAge(30 * 24 * 60 * 60);
+  @Resource
+  private MyBerryProperties myBerryProperties;
+
+  @Bean(initMethod = "start", destroyMethod = "shutdown")
+  public DefaultAdminClient getDefaultAdminClient() {
+    DefaultAdminClient defaultAdminClient = new DefaultAdminClient();
+    defaultAdminClient.setServerAddr(myBerryProperties.getServerAddr());
+    defaultAdminClient.setPassword(myBerryProperties.getPassword());
+    defaultAdminClient.setInstanceName(myBerryProperties.getInstanceName());
+    return defaultAdminClient;
   }
 }

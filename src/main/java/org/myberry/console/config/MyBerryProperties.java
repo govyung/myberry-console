@@ -21,14 +21,51 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-package org.myberry.console;
+package org.myberry.console.config;
 
-import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
 
-public class CustomLocal extends CookieLocaleResolver {
+@Component
+@PropertySource("classpath:application.properties")
+@ConfigurationProperties(prefix = "myberry")
+public class MyBerryProperties {
 
-  public CustomLocal() {
-    this.setCookieName("locale");
-    this.setCookieMaxAge(30 * 24 * 60 * 60);
+  private String serverAddr;
+  private String password;
+  private String instanceName;
+  private String produceMode;
+
+  public String getServerAddr() {
+    return serverAddr;
+  }
+
+  public void setServerAddr(String serverAddr) {
+    this.serverAddr = serverAddr;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public String getInstanceName() {
+    return instanceName;
+  }
+
+  public void setInstanceName(String instanceName) {
+    this.instanceName = instanceName;
+  }
+
+  public String getProduceMode() {
+    return produceMode;
+  }
+
+  public void setProduceMode(String produceMode) {
+    this.produceMode = produceMode;
   }
 }

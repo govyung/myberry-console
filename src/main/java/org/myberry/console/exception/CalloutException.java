@@ -21,14 +21,19 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 * SOFTWARE.
 */
-package org.myberry.console;
+package org.myberry.console.exception;
 
-import org.springframework.web.servlet.i18n.CookieLocaleResolver;
+public class CalloutException extends Exception {
 
-public class CustomLocal extends CookieLocaleResolver {
+  private static final long serialVersionUID = 5543270432215244929L;
 
-  public CustomLocal() {
-    this.setCookieName("locale");
-    this.setCookieMaxAge(30 * 24 * 60 * 60);
+  private String msg;
+
+  public CalloutException(String msg) {
+    this.msg = msg;
+  }
+
+  public String getMsg() {
+    return msg;
   }
 }

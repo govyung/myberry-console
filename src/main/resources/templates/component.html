@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:attr="lang=#{lang}">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="#{nav.menu.component}">Component</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="static/css/foundation-6.6.3.min.css"/>
+</head>
+<body>
+<header>
+  <div class="title-bar" data-responsive-toggle="console-menu" data-hide-for="medium">
+    <button class="menu-icon" type="button" data-toggle="console-menu"></button>
+    <div class="title-bar-title" th:text="#{nav.menu}">Menu</div>
+  </div>
+
+  <div class="top-bar grid-x" id="console-menu">
+    <div class="cell medium-2 large-3"></div>
+    <div class="cell medium-8 large-6">
+      <ul class="dropdown menu" data-dropdown-menu>
+        <li class="menu-text" th:text="#{nav.title}">MyBerry Management</li>
+        <li><a href="/" th:text="#{nav.menu.console}">Console</a></li>
+        <li><a href="/component" th:text="#{nav.menu.component}">Component</a></li>
+        <li>
+          <a href="#" th:text="#{nav.menu.language}">Language</a>
+          <ul class="menu vertical">
+            <li><a th:href="@{/component(lang='zh_CN')}">中文</a></li>
+            <li><a th:href="@{/component(lang='en_US')}">English</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="cell medium-2 large-3"></div>
+  </div>
+  </div>
+</header>
+<br>
+<div>
+  <div class="grid-x">
+    <div class="cell small-1  medium-2 large-3"></div>
+    <div class="cell small-10 medium-8 large-6">
+      <ul class="accordion" data-responsive-accordion-tabs="accordion medium-tabs large-accordion">
+        <li class="accordion-item" data-accordion-item>
+          <a href="#" class="accordion-title" th:text="#{component.accordion.create}">Create
+            Component</a>
+          <div class="accordion-content" data-tab-content>
+            <form id="component-create">
+              <div class="grid-x grid-padding-y">
+                <div class="cell medium-4 large-4" id="key-wrap">
+                  <input class="input-group-field" type="text" placeholder="key" name="key"
+                         id="key">
+                </div>
+                <div class="cell medium-6 large-6" id="expression-wrap">
+                  <input class="input-group-field" type="text" placeholder="expression"
+                         name="expression">
+                </div>
+                <div class="cell medium-2 large-2" id="value-wrap">
+                  <input class="input-group-field" type="number" placeholder="value" name="value">
+                </div>
+                <div class="cell medium-2 large-2" id="stepSize-wrap">
+                  <input class="input-group-field" type="number" placeholder="stepSize"
+                         name="stepSize">
+                </div>
+                <div class="cell medium-2 large-2" id="resetType-wrap">
+                  <select class="input-group-field" name="resetType">
+                    <option value="0" th:text="#{component.create.reset.type.no}">NO</option>
+                    <option value="1" th:text="#{component.create.reset.type.day}">DAY</option>
+                    <option value="2" th:text="#{component.create.reset.type.month}">MONTH</option>
+                    <option value="3" th:text="#{component.create.reset.type.year}">YEAR</option>
+                  </select>
+                </div>
+                <div class="cell medium-2 large-2" style="text-align:center;" id="create-wrap">
+                  <input type="button" class="button" id="create"
+                         th:attr="value = #{component.create}">
+                </div>
+              </div>
+            </form>
+          </div>
+        </li>
+        <li class="accordion-item is-active" data-accordion-item>
+          <a href="#" class="accordion-title">
+            <span th:text="#{component.total}">Total Component:</span>
+            <span id="component-size" th:text="${componentSize}">0</span>
+          </a>
+          <div class="accordion-content" data-tab-content>
+            <form id="component-query" class="input-group">
+              <input class="input-group-field" type="search" placeholder="key" name="key">
+              <div class="input-group-button">
+                <input type="button" class="button" id="search"
+                       th:attr="value = #{component.search}">
+              </div>
+            </form>
+          </div>
+        </li>
+      </ul>
+      <table id="searchTable">
+      </table>
+    </div>
+    <div class="cell small-1  medium-2 large-3"></div>
+  </div>
+</div>
+<script src="static/js/jquery-3.6.0.min.js"></script>
+<script src="static/js/foundation.min.js"></script>
+<script th:inline="javascript">
+  var produceMode = '';
+  $(document).ready(function () {
+    $(document).foundation();
+    produceMode = [[${produceMode}]];
+    if (produceMode == 'cr') {
+      showCRForm();
+    } else if (produceMode == 'ns') {
+      showNSForm();
+    } else {
+      hideAll();
+    }
+  });
+
+  $('#create').click(function () {
+    var d = {};
+    var t = $('#component-create').serializeArray();
+    $.each(t, function () {
+      d[this.name] = this.value;
+    });
+
+    $.ajax({
+      url: '/component/create',
+      type: 'post',
+      data: JSON.stringify(d),
+      contentType: 'application/json',
+      async: true,
+      success: function (data) {
+        var body = processResp(data);
+        if (body != null) {
+          $('#component-size').text(body.componentSize);
+        }
+      }
+    });
+  });
+
+  function showCRForm() {
+    $('#value-wrap').hide();
+    $('#stepSize-wrap').hide();
+    $('#resetType-wrap').hide();
+  }
+
+  function showNSForm() {
+    $('#expression-wrap').hide();
+  }
+
+  function hideAll() {
+    $('#key-wrap').hide();
+    $('#expression-wrap').hide();
+    $('#value-wrap').hide();
+    $('#stepSize-wrap').hide();
+    $('#resetType-wrap').hide();
+    $('#create-wrap').hide();
+  }
+
+  $('#search').click(function () {
+    var d = {};
+    var t = $('#component-query').serializeArray();
+    $.each(t, function () {
+      d[this.name] = this.value;
+    });
+
+    $.ajax({
+      url: '/component/search',
+      type: 'post',
+      data: JSON.stringify(d),
+      contentType: 'application/json',
+      async: true,
+      success: function (data) {
+        var body = processResp(data);
+        if (body != null) {
+          if (produceMode == 'cr') {
+            createCRTable(body);
+          } else if (produceMode == 'ns') {
+            createNSTable(body);
+          }
+        }
+      }
+    });
+  });
+
+  function processResp(data) {
+    if (data.code == 1) {
+      return data.body;
+    } else {
+      alert(data.callOut);
+    }
+  }
+
+  function createCRTable(crData) {
+    $('#searchTable').empty();
+    $('#searchTable').append(
+        '<thead><tr><th>' + ($('html').attr('lang') == 'zh' ? 'Key' : 'Key') + '</th><th>' + ($(
+        'html').attr('lang') == 'zh' ? '表达式' : 'Expression')
+        + '</th></tr></thead>')
+    $('#searchTable').append(
+        '<tbody><tr><td>' + crData.key + '</td><td>' + crData.expression + '</td></tr></tbody>')
+  }
+
+  function createNSTable(nsData) {
+    $('#searchTable').empty();
+    $('#searchTable').append(
+        '<thead><tr><th>' + ($('html').attr('lang') == 'zh' ? 'Key' : 'Key') + '</th><th>' + ($(
+        'html').attr('lang') == 'zh' ? '值' : 'value')
+        + '</th><th>' + ($('html').attr('lang') == 'zh' ? '步长' : 'stepSize') + '</th><th>' + ($(
+        'html').attr('lang') == 'zh' ? '重置类型' : 'resetType') + '</th></tr></thead>');
+    $('#searchTable').append(
+        '<tbody><tr><td>' + nsData.key + '</td><td>' + nsData.value + '</td><td>' + nsData.stepSize
+        + '</td><td>' + resetTypeMap(nsData.resetType) + '</td></tr></tbody>');
+  }
+
+  function resetTypeMap(resetType) {
+    if (resetType == 3) {
+      return ($('html').attr('lang') == 'zh' ? '年' : 'YEAR');
+    } else if (resetType == 2) {
+      return ($('html').attr('lang') == 'zh' ? '月' : 'MONTH');
+    } else if (resetType == 1) {
+      return ($('html').attr('lang') == 'zh' ? '日' : 'DAY');
+    } else {
+      return ($('html').attr('lang') == 'zh' ? '无' : 'NO');
+    }
+  }
+</script>
+</body>
+</body>
+</html>
